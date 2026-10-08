@@ -35,3 +35,5 @@ https://raw.githubusercontent.com/jhonsu01/OpenCallShield/main/spam_numbers.json
 ```
 
 Le voci italiane già scaricate devono eventualmente essere eliminate manualmente dalla lista nell'app.
+
+Questo ramo viene usato per verificare il download live delle fonti e i test dell'importatore. L'URL pubblico da usare nell'app resta quello del ramo `main` indicato sopra.
