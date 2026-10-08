@@ -1,6 +1,9 @@
 package com.opencallshield
 
 import android.app.Application
+import android.app.LocaleManager
+import android.os.Build
+import android.os.LocaleList
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
@@ -13,6 +16,14 @@ class OpenCallShieldApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Mantiene in italiano anche i testi forniti da Android e dalle librerie.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val localeManager = getSystemService(LocaleManager::class.java)
+            val italian = LocaleList.forLanguageTags("it")
+            if (localeManager.applicationLocales != italian) {
+                localeManager.applicationLocales = italian
+            }
+        }
         scheduleDailySync()
     }
 
@@ -32,3 +43,4 @@ class OpenCallShieldApp : Application() {
         )
     }
 }
+

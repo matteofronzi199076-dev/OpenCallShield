@@ -26,6 +26,16 @@ import com.opencallshield.ui.theme.OpenCallShieldTheme
 
 class MainActivity : ComponentActivity() {
 
+    override fun attachBaseContext(newBase: Context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            val config = android.content.res.Configuration(newBase.resources.configuration)
+            config.setLocale(java.util.Locale.ITALIAN)
+            super.attachBaseContext(newBase.createConfigurationContext(config))
+        } else {
+            super.attachBaseContext(newBase)
+        }
+    }
+
     private val viewModel: MainViewModel by viewModels()
 
     private val permissionLauncher = registerForActivityResult(
@@ -125,13 +135,13 @@ class MainActivity : ComponentActivity() {
 
     private fun showUpdateReadyPrompt() {
         android.app.AlertDialog.Builder(this)
-            .setTitle("Actualizacion disponible")
+            .setTitle("Aggiornamento disponibile")
             .setMessage(
-                "Se descargo una nueva version de OpenCallShield. " +
-                    "Reinicia la app para aplicarla y ver las novedades."
+                "È stata scaricata una nuova versione di OpenCallShield. " +
+                    "Riavvia l’app per applicarla e scoprire le novità."
             )
-            .setPositiveButton("Reiniciar ahora") { _, _ -> appUpdateManager.completeUpdate() }
-            .setNegativeButton("Mas tarde", null)
+            .setPositiveButton("Riavvia ora") { _, _ -> appUpdateManager.completeUpdate() }
+            .setNegativeButton("Più tardi", null)
             .show()
     }
 
@@ -140,3 +150,4 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
     }
 }
+

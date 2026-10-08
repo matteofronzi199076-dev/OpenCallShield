@@ -86,7 +86,7 @@ fun MainScreen(
     viewModel: MainViewModel,
     onRequestRole: () -> Unit
 ) {
-    val tabs = listOf("Proteccion", "Lista SPAM", "Historial")
+    val tabs = listOf("Protezione", "Lista SPAM", "Cronologia")
     var selectedTab by remember { mutableIntStateOf(0) }
     var showAccount by remember { mutableStateOf(false) }
 
@@ -118,14 +118,14 @@ fun MainScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Filled.Shield, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text(if (showAccount) "Colaborar" else "OpenCallShield")
+                        Text(if (showAccount) "Collabora" else "OpenCallShield")
                     }
                 },
                 actions = {
                     IconButton(onClick = { showAccount = !showAccount }) {
                         Icon(
                             if (showAccount) Icons.Filled.Close else Icons.Filled.MoreVert,
-                            contentDescription = if (showAccount) "Cerrar" else "Mas opciones"
+                            contentDescription = if (showAccount) "Chiudi" else "Altre opzioni"
                         )
                     }
                 }
@@ -177,13 +177,13 @@ private fun ProtectionTab(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)) {
             Column(Modifier.padding(16.dp)) {
                 Text(
-                    "Proteccion activa",
+                    "Protezione attiva",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Spacer(Modifier.size(4.dp))
                 Text(
-                    "$spamCount numeros en lista negra  -  $blockedCount llamadas filtradas",
+                    "$spamCount numeri nella lista nera  -  $blockedCount chiamate filtrate",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -193,31 +193,31 @@ private fun ProtectionTab(
         Button(onClick = onRequestRole, modifier = Modifier.fillMaxWidth()) {
             Icon(Icons.Filled.Shield, contentDescription = null)
             Spacer(Modifier.width(8.dp))
-            Text("Activar como app de filtrado de llamadas")
+            Text("Attiva come app per filtrare le chiamate")
         }
         Text(
-            "Android pedira permiso para que OpenCallShield filtre tus llamadas. " +
-                "Es necesario para bloquear el SPAM.",
+            "Android chiederà il permesso per consentire a OpenCallShield di filtrare le tue chiamate. " +
+                "È necessario per bloccare lo SPAM.",
             style = MaterialTheme.typography.bodySmall
         )
 
         HorizontalDivider()
 
         SettingRow(
-            title = "Bloquear numeros desconocidos",
-            subtitle = "Rechaza llamadas que no esten en tus contactos",
+            title = "Blocca i numeri sconosciuti",
+            subtitle = "Rifiuta le chiamate da numeri non presenti nei tuoi contatti",
             checked = state.blockUnknown,
             onCheckedChange = viewModel::setBlockUnknown
         )
         SettingRow(
-            title = "Bloquear prefijos sospechosos",
-            subtitle = "Usa la lista negra de prefijos internacionales",
+            title = "Blocca i prefissi sospetti",
+            subtitle = "Usa la lista nera dei prefissi internazionali",
             checked = state.blockPrefixes,
             onCheckedChange = viewModel::setBlockPrefixes
         )
         SettingRow(
-            title = "Silenciar en vez de rechazar",
-            subtitle = "La llamada no suena pero queda como perdida",
+            title = "Silenzia anziché rifiutare",
+            subtitle = "La chiamata non squilla, ma risulta persa",
             checked = state.silence,
             onCheckedChange = viewModel::setSilence
         )
@@ -237,14 +237,14 @@ private fun ProtectionTab(
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                if (countriesCount > 0) "Bloquear llamadas por pais  ($countriesCount)"
-                else "Bloquear llamadas por pais"
+                if (countriesCount > 0) "Blocca le chiamate per Paese  ($countriesCount)"
+                else "Blocca le chiamate per Paese"
             )
         }
         if (countriesOpen) {
             Text(
-                "Toca las banderas de los paises cuyas llamadas NO quieres recibir. " +
-                    "No necesitas escribir prefijos.",
+                "Tocca le bandiere dei Paesi da cui NON vuoi ricevere chiamate. " +
+                    "Non è necessario scrivere i prefissi.",
                 style = MaterialTheme.typography.bodySmall
             )
             FlowRow(
@@ -271,9 +271,9 @@ private fun ProtectionTab(
             if (state.syncing) {
                 CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
                 Spacer(Modifier.width(8.dp))
-                Text("Sincronizando...")
+                Text("Sincronizzazione in corso...")
             } else {
-                Text("Sincronizar ahora")
+                Text("Sincronizza ora")
             }
         }
 
@@ -287,20 +287,20 @@ private fun ProtectionTab(
                 contentDescription = null
             )
             Spacer(Modifier.width(8.dp))
-            Text("Ajustes avanzados")
+            Text("Impostazioni avanzate")
         }
         if (advancedOpen) {
             OutlinedTextField(
                 value = state.syncUrl,
                 onValueChange = viewModel::setSyncUrl,
-                label = { Text("URL de la base colaborativa (JSON)") },
+                label = { Text("URL del database collaborativo (JSON)") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
             OutlinedTextField(
                 value = state.prefixes,
                 onValueChange = viewModel::setPrefixes,
-                label = { Text("Prefijos manuales (avanzado, separados por coma)") },
+                label = { Text("Prefissi manuali (avanzato, separati da virgole)") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
@@ -308,7 +308,7 @@ private fun ProtectionTab(
                 onClick = { uriHandler.openUri(GUIDE_URL) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("¿Como crear tu propia base colaborativa? (guia)")
+                Text("Come creare il tuo database collaborativo? (guida)")
             }
         }
 
@@ -320,10 +320,10 @@ private fun ProtectionTab(
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF29ABE0))
         ) {
-            Text("☕  Apoyame en Ko-fi")
+            Text("☕  Sostienimi su Ko-fi")
         }
         Text(
-            "OpenCallShield es gratuito y open source. Si te resulta util, considera apoyarlo.",
+            "OpenCallShield è gratuito e a codice aperto. Se ti è utile, considera di sostenerlo.",
             style = MaterialTheme.typography.bodySmall
         )
 
@@ -332,7 +332,7 @@ private fun ProtectionTab(
             onClick = { uriHandler.openUri(REPO_URL) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("OpenCallShield  -  ver el proyecto en GitHub")
+            Text("OpenCallShield  -  vedi il progetto su GitHub")
         }
     }
 }
@@ -372,7 +372,7 @@ private fun SpamListTab(
             OutlinedTextField(
                 value = input,
                 onValueChange = { input = it },
-                label = { Text("Numero a reportar") },
+                label = { Text("Numero da segnalare") },
                 modifier = Modifier.weight(1f),
                 singleLine = true
             )
@@ -381,7 +381,7 @@ private fun SpamListTab(
                 viewModel.report(input)
                 input = ""
             }) {
-                Icon(Icons.Filled.Block, contentDescription = "Reportar")
+                Icon(Icons.Filled.Block, contentDescription = "Segnala")
             }
         }
 
@@ -394,8 +394,8 @@ private fun SpamListTab(
             Icon(Icons.Filled.CloudUpload, contentDescription = null)
             Spacer(Modifier.width(8.dp))
             Text(
-                if (authState.loggedIn) "Aportar $localCount numero(s) a la base publica"
-                else "Aportar a la base publica (opcional)"
+                if (authState.loggedIn) "Invia $localCount numeri al database pubblico"
+                else "Contribuisci al database pubblico (facoltativo)"
             )
         }
 
@@ -408,25 +408,36 @@ private fun SpamListTab(
             if (syncing) {
                 CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
                 Spacer(Modifier.width(8.dp))
-                Text("Sincronizando...")
+                Text("Sincronizzazione in corso...")
             } else {
                 Icon(Icons.Filled.Sync, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text("Sincronizar base publica")
+                Text("Sincronizza il database pubblico")
             }
         }
         Text(
-            "Sincroniza primero la base publica: los numeros que ya esten en ella no se " +
-                "vuelven a reportar. Asi solo aportas numeros nuevos y evitas duplicados.",
+            "Sincronizza prima il database pubblico: i numeri già presenti non vengono " +
+                "segnalati di nuovo. Così contribuisci solo con numeri nuovi ed eviti i duplicati.",
             style = MaterialTheme.typography.bodySmall
         )
 
         Spacer(Modifier.size(12.dp))
         if (numbers.isEmpty()) {
-            EmptyState("Aun no hay numeros reportados.")
+            EmptyState("Non ci sono ancora numeri segnalati.")
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(numbers, key = { it.number }) { item ->
+                    val displayTag = when (item.tag.lowercase(Locale.ROOT)) {
+                        "spam" -> "SPAM"
+                        "example" -> "Esempio"
+                        "scam" -> "Truffa"
+                        else -> item.tag
+                    }
+                    val displaySource = when (item.source) {
+                        "local" -> "locale"
+                        "github" -> "GitHub"
+                        else -> item.source
+                    }
                     Card(Modifier.fillMaxWidth()) {
                         Row(
                             Modifier.padding(12.dp),
@@ -435,12 +446,12 @@ private fun SpamListTab(
                             Column(Modifier.weight(1f)) {
                                 Text(item.number, style = MaterialTheme.typography.bodyLarge)
                                 Text(
-                                    "${item.tag} - ${item.reports} reportes - ${item.source}",
+                                    "$displayTag - ${item.reports} segnalazioni - $displaySource",
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             }
                             IconButton(onClick = { viewModel.remove(item) }) {
-                                Icon(Icons.Filled.Delete, contentDescription = "Eliminar")
+                                Icon(Icons.Filled.Delete, contentDescription = "Elimina")
                             }
                         }
                     }
@@ -456,7 +467,7 @@ private fun HistoryTab(
     spamNumbers: List<SpamNumber>,
     viewModel: MainViewModel
 ) {
-    val formatter = remember { SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()) }
+    val formatter = remember { SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALIAN) }
     val spamSet = remember(spamNumbers) { spamNumbers.map { it.number }.toHashSet() }
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
@@ -465,22 +476,22 @@ private fun HistoryTab(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Llamadas filtradas", style = MaterialTheme.typography.titleMedium)
+            Text("Chiamate filtrate", style = MaterialTheme.typography.titleMedium)
             if (calls.isNotEmpty()) {
                 OutlinedButton(onClick = { viewModel.clearHistory() }) {
                     Icon(Icons.Filled.History, contentDescription = null)
                     Spacer(Modifier.width(4.dp))
-                    Text("Limpiar")
+                    Text("Svuota")
                 }
             }
         }
         Text(
-            "Toca + para anadir el numero a la lista de SPAM, o el check para quitarlo.",
+            "Tocca + per aggiungere il numero alla lista SPAM o il segno di spunta per rimuoverlo.",
             style = MaterialTheme.typography.bodySmall
         )
         Spacer(Modifier.size(12.dp))
         if (calls.isEmpty()) {
-            EmptyState("Todavia no se ha filtrado ninguna llamada.")
+            EmptyState("Nessuna chiamata è stata ancora filtrata.")
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(calls, key = { it.id }) { call ->
@@ -499,7 +510,7 @@ private fun HistoryTab(
                                     overflow = TextOverflow.Ellipsis
                                 )
                                 Text(
-                                    "${if (call.silenced) "Silenciada" else "Rechazada"} - ${call.reason}",
+                                    "${if (call.silenced) "Silenziata" else "Rifiutata"} - ${call.reason}",
                                     style = MaterialTheme.typography.bodySmall
                                 )
                                 Text(
@@ -511,7 +522,7 @@ private fun HistoryTab(
                                 IconButton(onClick = { viewModel.removeNumber(call.number) }) {
                                     Icon(
                                         Icons.Filled.CheckCircle,
-                                        contentDescription = "Quitar de SPAM",
+                                        contentDescription = "Rimuovi dalla lista SPAM",
                                         tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
@@ -519,7 +530,7 @@ private fun HistoryTab(
                                 IconButton(onClick = { viewModel.addToSpam(call.number) }) {
                                     Icon(
                                         Icons.Filled.AddCircle,
-                                        contentDescription = "Anadir a SPAM"
+                                        contentDescription = "Aggiungi alla lista SPAM"
                                     )
                                 }
                             }
@@ -537,6 +548,12 @@ private fun AccountTab(
     viewModel: MainViewModel
 ) {
     val uriHandler = LocalUriHandler.current
+    val displayMethod = when (authState.method) {
+        "device" -> "codice dispositivo"
+        "pat" -> "token personale"
+        null -> "-"
+        else -> authState.method
+    }
 
     Column(
         Modifier
@@ -551,11 +568,11 @@ private fun AccountTab(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Filled.AccountCircle, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Conectado como @${authState.login}", style = MaterialTheme.typography.titleMedium)
+                        Text("Connesso come @${authState.login}", style = MaterialTheme.typography.titleMedium)
                     }
                     Spacer(Modifier.size(4.dp))
                     Text(
-                        "Metodo: ${authState.method ?: "-"}. Tus aportes se envian como Issue al repositorio publico.",
+                        "Metodo: $displayMethod. I tuoi contributi vengono inviati come segnalazioni (Issue) al repository pubblico.",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -563,7 +580,7 @@ private fun AccountTab(
             OutlinedButton(onClick = { viewModel.logout() }, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text("Cerrar sesion")
+                Text("Esci")
             }
             return@Column
         }
@@ -573,7 +590,7 @@ private fun AccountTab(
         if (device != null) {
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Paso 1 - Escribe este codigo en GitHub:", style = MaterialTheme.typography.bodyMedium)
+                    Text("Passaggio 1 - Inserisci questo codice su GitHub:", style = MaterialTheme.typography.bodyMedium)
                     Spacer(Modifier.size(8.dp))
                     Text(
                         device.userCode,
@@ -587,38 +604,38 @@ private fun AccountTab(
                     ) {
                         Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Abrir ${device.verificationUri}")
+                        Text("Apri ${device.verificationUri}")
                     }
                     Spacer(Modifier.size(12.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
                         Spacer(Modifier.width(8.dp))
-                        Text("Esperando autorizacion...", style = MaterialTheme.typography.bodySmall)
+                        Text("In attesa di autorizzazione...", style = MaterialTheme.typography.bodySmall)
                     }
                     Spacer(Modifier.size(8.dp))
                     OutlinedButton(
                         onClick = { viewModel.cancelDeviceLogin() },
                         modifier = Modifier.fillMaxWidth()
-                    ) { Text("Cancelar") }
+                    ) { Text("Annulla") }
                 }
             }
             return@Column
         }
 
         Text(
-            "Colaborar es OPCIONAL. La app funciona completa sin esto. Conecta una " +
-                "cuenta solo si quieres aportar numeros a la base publica colaborativa.",
+            "Collaborare è FACOLTATIVO. L'app funziona completamente anche senza. Collega un " +
+                "account solo se vuoi contribuire con numeri al database pubblico collaborativo.",
             style = MaterialTheme.typography.bodyMedium
         )
 
         // --- Device Flow ---
         Card(Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Opcion A - Codigo de dispositivo", style = MaterialTheme.typography.titleSmall)
+                Text("Opzione A - Codice del dispositivo", style = MaterialTheme.typography.titleSmall)
                 OutlinedTextField(
                     value = authState.clientId,
                     onValueChange = viewModel::setClientId,
-                    label = { Text("Client ID (publico)") },
+                    label = { Text("ID client (pubblico)") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -627,10 +644,10 @@ private fun AccountTab(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !authState.busy
                 ) {
-                    Text("Conectar")
+                    Text("Connetti")
                 }
                 Text(
-                    "Se abrira github.com/login/device para autorizar. El Client ID es publico.",
+                    "Si aprirà github.com/login/device per l'autorizzazione. L'ID client è pubblico.",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -642,11 +659,11 @@ private fun AccountTab(
         var pat by remember { mutableStateOf("") }
         Card(Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Opcion B - Token personal (PAT)", style = MaterialTheme.typography.titleSmall)
+                Text("Opzione B - Token personale (PAT)", style = MaterialTheme.typography.titleSmall)
                 OutlinedTextField(
                     value = pat,
                     onValueChange = { pat = it },
-                    label = { Text("Token (scope public_repo)") },
+                    label = { Text("Token (ambito public_repo)") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -655,10 +672,10 @@ private fun AccountTab(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !authState.busy
                 ) {
-                    Text("Conectar con token")
+                    Text("Connetti con token")
                 }
                 Text(
-                    "Crea el token en github.com/settings/tokens con permiso public_repo.",
+                    "Crea il token su github.com/settings/tokens con il permesso public_repo.",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -668,7 +685,7 @@ private fun AccountTab(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
                 Spacer(Modifier.width(8.dp))
-                Text("Procesando...", style = MaterialTheme.typography.bodySmall)
+                Text("Elaborazione in corso...", style = MaterialTheme.typography.bodySmall)
             }
         }
     }
@@ -691,3 +708,4 @@ private fun EmptyState(message: String) {
         Text(message, style = MaterialTheme.typography.bodyMedium)
     }
 }
+

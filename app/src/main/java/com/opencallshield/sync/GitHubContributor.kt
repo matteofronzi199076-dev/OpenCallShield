@@ -2,6 +2,7 @@ package com.opencallshield.sync
 
 import com.opencallshield.data.SpamNumber
 import com.opencallshield.net.Http
+import com.opencallshield.net.UserFacingNetworkException
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -20,7 +21,7 @@ object GitHubContributor {
         repo: String,
         numbers: List<SpamNumber>
     ): String {
-        require(numbers.isNotEmpty()) { "No hay numeros para aportar." }
+        require(numbers.isNotEmpty()) { "Non ci sono numeri da condividere." }
 
         val jsonArray = JSONArray()
         numbers.forEach { n ->
@@ -33,8 +34,8 @@ object GitHubContributor {
         }
 
         val body = buildString {
-            append("Propuesta de numeros para `spam_numbers.json`, enviada desde la app OpenCallShield.\n\n")
-            append("Cantidad: ${numbers.size}\n\n")
+            append("Proposta di numeri per `spam_numbers.json`, inviata dall’app OpenCallShield.\n\n")
+            append("Totale: ${numbers.size}\n\n")
             append("```json\n")
             append(jsonArray.toString(2))
             append("\n```\n")
@@ -44,7 +45,7 @@ object GitHubContributor {
         // repo. Un usuario externo (no colaborador) puede abrir un Issue, pero no
         // etiquetarlo; incluir labels provocaba un 403. El titulo ya identifica el aporte.
         val payload = JSONObject()
-            .put("title", "Aporte a base SPAM: ${numbers.size} numero(s)")
+            .put("title", "Contributo alla banca dati SPAM: ${numbers.size} numeri")
             .put("body", body)
 
         val res = Http.request(
@@ -57,7 +58,8 @@ object GitHubContributor {
             ),
             body = payload.toString()
         )
-        if (!res.isSuccess) throw IllegalStateException("Error ${res.code}: ${res.body.take(200)}")
-        return res.json().optString("html_url", "Issue creado")
+        if (!res.isSuccess) throw UserFacingNetworkException("Impossibile inviare il contributo a GitHub (HTTP ${res.code}).")
+        return res.json().optString("html_url", "Issue creata")
     }
 }
+

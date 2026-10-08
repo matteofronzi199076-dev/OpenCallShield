@@ -42,7 +42,7 @@ class SpamCallScreeningService : CallScreeningService() {
 
             if (decision is SpamDetector.Decision.Block) {
                 repo.logBlocked(
-                    number = number ?: "(oculto)",
+                    number = number ?: "(nascosto)",
                     reason = decision.reason,
                     silenced = decision.silence
                 )
@@ -79,3 +79,4 @@ class SpamCallScreeningService : CallScreeningService() {
         scope.cancel()
     }
 }
+

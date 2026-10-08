@@ -1,6 +1,7 @@
 package com.opencallshield.auth
 
 import com.opencallshield.net.Http
+import com.opencallshield.net.UserFacingNetworkException
 
 /**
  * Autenticacion con GitHub para una app movil sin backend.
@@ -36,10 +37,10 @@ class GitHubAuthManager {
             ),
             body = Http.formBody(mapOf("client_id" to clientId, "scope" to scope))
         )
-        if (!res.isSuccess) throw IllegalStateException("Error ${res.code}: ${res.body}")
+        if (!res.isSuccess) throw UserFacingNetworkException("Impossibile avviare l’accesso a GitHub (HTTP ${res.code}).")
         val j = res.json()
         if (j.has("error")) {
-            throw IllegalStateException(j.optString("error_description", j.getString("error")))
+            throw UserFacingNetworkException(oauthError(j.getString("error")))
         }
         return DeviceCode(
             deviceCode = j.getString("device_code"),
@@ -72,10 +73,10 @@ class GitHubAuthManager {
         return when (j.optString("error")) {
             "authorization_pending" -> PollResult.Pending
             "slow_down" -> PollResult.SlowDown(j.optInt("interval", 5))
-            "expired_token" -> PollResult.Error("El codigo expiro, vuelve a empezar.")
-            "access_denied" -> PollResult.Error("Autorizacion cancelada.")
-            "" -> PollResult.Error("Respuesta inesperada (${res.code}).")
-            else -> PollResult.Error(j.optString("error_description", j.getString("error")))
+            "expired_token" -> PollResult.Error("Il codice è scaduto. Ricomincia l’accesso.")
+            "access_denied" -> PollResult.Error("Autorizzazione annullata.")
+            "" -> PollResult.Error("Risposta inattesa da GitHub (HTTP ${res.code}).")
+            else -> PollResult.Error(oauthError(j.getString("error")))
         }
     }
 
@@ -89,11 +90,23 @@ class GitHubAuthManager {
                 "Authorization" to "Bearer $token"
             )
         )
-        if (!res.isSuccess) throw IllegalStateException("Token invalido o sin permisos (${res.code}).")
+        if (!res.isSuccess) throw UserFacingNetworkException("Token non valido o privo delle autorizzazioni necessarie (HTTP ${res.code}).")
         return res.json().getString("login")
+    }
+
+    private fun oauthError(error: String): String = when (error) {
+        "incorrect_client_credentials" -> "Il Client ID dell’app OAuth non è valido. Controlla la configurazione."
+        "device_flow_disabled" -> "L’accesso tramite codice dispositivo è disabilitato per questa app OAuth."
+        "invalid_scope" -> "Le autorizzazioni richieste dall’app OAuth non sono valide."
+        "unsupported_grant_type" -> "GitHub non supporta il metodo di autorizzazione richiesto."
+        "incorrect_device_code" -> "Il codice dispositivo non è valido. Ricomincia l’accesso."
+        "expired_token" -> "Il codice è scaduto. Ricomincia l’accesso."
+        "access_denied" -> "Autorizzazione annullata."
+        else -> "Autenticazione GitHub non riuscita (codice: $error)."
     }
 
     companion object {
         const val SCOPE = "public_repo"
     }
 }
+

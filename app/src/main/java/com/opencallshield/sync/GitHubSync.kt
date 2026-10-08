@@ -1,6 +1,7 @@
 package com.opencallshield.sync
 
 import com.opencallshield.data.SpamNumber
+import com.opencallshield.net.UserFacingNetworkException
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -29,7 +30,7 @@ object GitHubSync {
         try {
             val code = connection.responseCode
             if (code !in 200..299) {
-                throw IllegalStateException("HTTP $code al descargar la base")
+                throw UserFacingNetworkException("Errore HTTP $code durante il download della banca dati")
             }
             val body = connection.inputStream.bufferedReader().use { it.readText() }
             return parse(body)
@@ -58,3 +59,4 @@ object GitHubSync {
         return result
     }
 }
+

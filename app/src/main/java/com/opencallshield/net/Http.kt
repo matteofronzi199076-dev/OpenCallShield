@@ -8,6 +8,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
+/** Errore con un messaggio italiano pronto per l’interfaccia utente. */
+class UserFacingNetworkException(message: String) : IllegalStateException(message)
+
 /** Resultado crudo de una peticion HTTP. */
 data class HttpResult(val code: Int, val body: String) {
     val isSuccess: Boolean get() = code in 200..299
@@ -54,3 +57,4 @@ object Http {
             URLEncoder.encode(k, "UTF-8") + "=" + URLEncoder.encode(v, "UTF-8")
         }
 }
+

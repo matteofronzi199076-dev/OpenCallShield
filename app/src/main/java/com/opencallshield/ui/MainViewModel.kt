@@ -139,9 +139,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             try {
                 val remote = GitHubSync.fetch(settings.syncUrl)
                 repo.mergeRemote(remote)
-                "Sincronizado: ${remote.size} numeros recibidos"
+                "Sincronizzazione completata: ${remote.size} numeri ricevuti"
             } catch (e: Exception) {
-                "Error al sincronizar: ${e.message ?: "desconocido"}"
+                "Errore durante la sincronizzazione: ${friendlyError(e)}"
             }
         }
         _state.update { it.copy(syncing = false, message = message) }
@@ -159,7 +159,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun startDeviceLogin() {
         val clientId = settings.githubClientId.trim()
         if (clientId.isEmpty()) {
-            _auth.update { it.copy(message = "Configura el Client ID de la OAuth App primero.") }
+            _auth.update { it.copy(message = "Prima configura il Client ID dell’app OAuth.") }
             return
         }
         pollJob?.cancel()
@@ -201,21 +201,26 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 }
             }
         }
-        _auth.update { it.copy(busy = false, deviceCode = null, message = "El codigo expiro, intenta de nuevo.") }
+        _auth.update { it.copy(busy = false, deviceCode = null, message = "Il codice è scaduto. Riprova.") }
     }
 
     private fun friendlyError(e: Throwable): String = when (e) {
         is java.net.UnknownHostException ->
-            "Sin conexion o el DNS no resuelve github.com. Revisa tu red e intenta de nuevo."
+            "Connessione assente o impossibile raggiungere il server tramite DNS. Controlla la rete e riprova."
         is java.net.SocketTimeoutException ->
-            "La conexion tardo demasiado. Intenta de nuevo."
-        else -> e.message ?: "Error de red"
+            "La connessione ha impiegato troppo tempo. Riprova."
+        is org.json.JSONException -> "La risposta del server non è valida. Riprova più tardi."
+        is java.net.MalformedURLException -> "L’indirizzo di sincronizzazione non è valido."
+        is java.io.IOException -> "Errore di connessione. Controlla la rete e riprova."
+        is com.opencallshield.net.UserFacingNetworkException ->
+            e.message ?: "Impossibile completare l’operazione."
+        else -> "Impossibile completare l’operazione. Riprova."
     }
 
     fun loginWithPat(rawToken: String) {
         val token = rawToken.trim()
         if (token.isEmpty()) {
-            _auth.update { it.copy(message = "Pega un token valido.") }
+            _auth.update { it.copy(message = "Incolla un token valido.") }
             return
         }
         _auth.update { it.copy(busy = true, message = null) }
@@ -237,7 +242,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 method = method,
                 busy = false,
                 deviceCode = null,
-                message = "Sesion iniciada como @$login"
+                message = "Accesso effettuato come @$login"
             )
         }
     }
@@ -251,18 +256,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         pollJob?.cancel()
         tokenStore.clear()
         _auth.update {
-            it.copy(loggedIn = false, login = null, method = null, deviceCode = null, message = "Sesion cerrada")
+            it.copy(loggedIn = false, login = null, method = null, deviceCode = null, message = "Disconnessione effettuata")
         }
     }
 
     fun contribute() {
         if (!tokenStore.isLoggedIn) {
-            _auth.update { it.copy(message = "Inicia sesion con GitHub primero.") }
+            _auth.update { it.copy(message = "Prima accedi a GitHub.") }
             return
         }
         val locals = spamNumbers.value.filter { it.source == "local" }
         if (locals.isEmpty()) {
-            _auth.update { it.copy(message = "No tienes numeros propios reportados para aportar.") }
+            _auth.update { it.copy(message = "Non hai numeri segnalati personalmente da condividere.") }
             return
         }
         _auth.update { it.copy(busy = true, message = null) }
@@ -275,9 +280,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                         repo = settings.contribRepo,
                         numbers = locals
                     )
-                    "Aporte enviado (Issue): $url"
+                    "Contributo inviato (Issue): $url"
                 } catch (e: Exception) {
-                    "Error al aportar: ${e.message ?: "desconocido"}"
+                    "Errore durante l’invio del contributo: ${friendlyError(e)}"
                 }
             }
             _auth.update { it.copy(busy = false, message = message) }
@@ -286,3 +291,4 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun consumeAuthMessage() = _auth.update { it.copy(message = null) }
 }
+

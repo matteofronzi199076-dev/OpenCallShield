@@ -23,7 +23,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.jhonsu01.opencallshield"
+        applicationId = "com.matteofronzi.opencallshield.it"
         minSdk = 29
         targetSdk = 36
         // En CI se derivan del tag (vX.Y.Z); en local usan estos valores por defecto.
@@ -47,7 +47,7 @@ android {
         debug {
             isMinifyEnabled = false
             applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug"
+            versionNameSuffix = "-it-debug"
         }
         release {
             isMinifyEnabled = false
@@ -113,3 +113,4 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
+
