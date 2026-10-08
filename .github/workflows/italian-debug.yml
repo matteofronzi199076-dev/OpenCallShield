@@ -23,6 +23,9 @@ jobs:
           java-version: '17'
       - name: Configura Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
       - name: Installa SDK Android 16
         run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
       - name: Configura Gradle
