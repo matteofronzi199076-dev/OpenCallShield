@@ -1,0 +1,22 @@
+I dati derivati della lista combinata in questa cartella sono distribuiti sotto
+Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
+
+Testo della licenza: https://creativecommons.org/licenses/by-sa/4.0/legalcode.it
+
+Attribuzioni:
+- Blocklist telefonica Italia, community Kallm / thesqual87:
+  https://github.com/thesqual87/blocklist-telefonica-italia
+  Dati originali CC BY-SA 4.0:
+  https://github.com/thesqual87/blocklist-telefonica-italia/blob/main/LICENSE
+- OpenCallShield, jhonsu01 e contributori:
+  https://github.com/jhonsu01/OpenCallShield
+  Sorgente originale con licenza MIT:
+  https://github.com/jhonsu01/OpenCallShield/blob/main/LICENSE
+  Il relativo avviso MIT è conservato nel file LICENSE alla radice di questo repository.
+
+Modifiche apportate ai dati italiani: conversione da CSV al formato JSON di
+OpenCallShield, aggiunta delle forme nazionale e internazionale 0039 per gli
+stessi numeri esatti, integrazione con il database originale e deduplicazione.
+
+La licenza CC BY-SA si applica ai dati derivati in questa cartella; il codice
+dell'applicazione e gli script restano soggetti alla licenza MIT del repository.

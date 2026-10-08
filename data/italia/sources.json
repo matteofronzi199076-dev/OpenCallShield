@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-07",
+  "license": "CC-BY-SA-4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "modifications": "CSV italiano convertito nel formato OpenCallShield e unito al database originale; aggiunte le forme esatte +39, nazionale e 0039. Nessuna regola di prefisso; nessun incremento delle segnalazioni.",
+  "matching": "exact_numbers_only",
+  "number_of_records": 822,
+  "sources": [
+    {
+      "repository": "https://github.com/jhonsu01/OpenCallShield",
+      "path": "spam_numbers.json",
+      "git_ref": "1b870aba50be9598e6dba0ba1016865e914a7c28",
+      "url": "https://github.com/jhonsu01/OpenCallShield/blob/1b870aba50be9598e6dba0ba1016865e914a7c28/spam_numbers.json",
+      "raw_url": "https://raw.githubusercontent.com/jhonsu01/OpenCallShield/1b870aba50be9598e6dba0ba1016865e914a7c28/spam_numbers.json",
+      "sha256": "4e8a98f1c3e9050a2ed118bb7e06b87a3d795de2ce2023740a298fd0dec72ccb",
+      "name": "OpenCallShield — database originale",
+      "license": "MIT",
+      "license_url": "https://github.com/jhonsu01/OpenCallShield/blob/1b870aba50be9598e6dba0ba1016865e914a7c28/LICENSE",
+      "updated_at": "2026-10-07",
+      "unique_numbers": 813
+    },
+    {
+      "repository": "https://github.com/thesqual87/blocklist-telefonica-italia",
+      "path": "data/blocklist.csv",
+      "git_ref": "36624001142bc1645f75b967e6f0f8f638b45474",
+      "url": "https://github.com/thesqual87/blocklist-telefonica-italia/blob/36624001142bc1645f75b967e6f0f8f638b45474/data/blocklist.csv",
+      "raw_url": "https://raw.githubusercontent.com/thesqual87/blocklist-telefonica-italia/36624001142bc1645f75b967e6f0f8f638b45474/data/blocklist.csv",
+      "sha256": "a3c1e82c513d3814608affe1616411e8c540d56c369c3e7926ba9756824077db",
+      "name": "Blocklist telefonica Italia",
+      "attribution": "Blocklist telefonica Italia, community Kallm / thesqual87",
+      "license": "CC-BY-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source_license_url": "https://github.com/thesqual87/blocklist-telefonica-italia/blob/36624001142bc1645f75b967e6f0f8f638b45474/LICENSE",
+      "updated_at": "2026-07-14",
+      "unique_numbers": 3,
+      "alias_records": 9,
+      "added_records": 9
+    }
+  ]
+}

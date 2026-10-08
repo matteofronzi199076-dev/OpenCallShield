@@ -1,0 +1,73 @@
+name: Sincronizzazione lista SPAM italiana
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [ main, 'codex/spam-italia-verifica' ]
+    paths:
+      - '.github/scripts/update_spam_italia.py'
+      - '.github/scripts/test_update_spam_italia.py'
+      - '.github/workflows/spam-italia-sync.yml'
+      - 'data/italia/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lista-spam-italia-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Valida e aggiorna database originale e italiano
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Scarica repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Configura Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verifica conversione e conservazione dei dati
+        run: python3 -m unittest discover -s .github/scripts -p 'test_update_spam_italia.py' -v
+      - name: Scarica le fonti e genera la lista combinata
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/scripts/update_spam_italia.py
+      - name: Verifica formato dei file
+        run: git diff --check -- data/italia
+      - name: Pubblica riepilogo
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          data = json.loads(Path('data/italia/spam_numbers.json').read_text())
+          print('Lista JSON generata e validata: **%s voci**.' % len(data['numbers']))
+          print('Fonti e attribuzioni: `data/italia/sources.json`.')
+          print('La lista italiana comunitaria ha copertura limitata; non equivale a un elenco completo dello SPAM italiano.')
+          PY
+      - name: Salva copia verificata dei dati
+        uses: actions/upload-artifact@v4
+        with:
+          name: lista-spam-originale-e-italiana
+          path: data/italia/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Aggiorna la lista pubblicata
+        if: github.ref == 'refs/heads/main'
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/italia/spam_numbers.json data/italia/sources.json
+          if git diff --cached --quiet; then
+            echo 'Le fonti non sono cambiate: nessun aggiornamento necessario.'
+          else
+            git commit -m 'data: aggiorna lista SPAM originale e italiana [skip ci]'
+            git push origin HEAD:main
+          fi
