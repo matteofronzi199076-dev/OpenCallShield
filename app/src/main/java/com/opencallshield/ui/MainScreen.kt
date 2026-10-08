@@ -204,6 +204,12 @@ private fun ProtectionTab(
         HorizontalDivider()
 
         SettingRow(
+            title = "Blocca automaticamente i numeri esteri",
+            subtitle = "Attivo di default: rifiuta i prefissi diversi da +39, eccetto i contatti. Non serve selezionare i Paesi.",
+            checked = state.blockForeign,
+            onCheckedChange = viewModel::setBlockForeign
+        )
+        SettingRow(
             title = "Blocca i numeri sconosciuti",
             subtitle = "Rifiuta le chiamate da numeri non presenti nei tuoi contatti",
             checked = state.blockUnknown,
@@ -275,6 +281,19 @@ private fun ProtectionTab(
             } else {
                 Text("Sincronizza ora")
             }
+        }
+
+        Text(
+            "Sincronizzazione automatica ogni 24 ore, quando Android consente il lavoro in background. " +
+                "La lista gratuita include segnalazioni italiane della community Kallm / thesqual87. " +
+                "Non comprende tutti i numeri SPAM italiani.",
+            style = MaterialTheme.typography.bodySmall
+        )
+        TextButton(
+            onClick = { uriHandler.openUri("https://github.com/matteofronzi199076-dev/OpenCallShield/blob/main/data/italia/README.md") },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Fonti del database e licenza CC BY-SA 4.0")
         }
 
         // --- Ajustes avanzados (colapsable): URL de la base y prefijos manuales ---

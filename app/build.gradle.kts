@@ -23,7 +23,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.matteofronzi.opencallshield.it"
+        applicationId = "com.matteofronzi.opencallshield.it.esteri"
         minSdk = 29
         targetSdk = 36
         // En CI se derivan del tag (vX.Y.Z); en local usan estos valores por defecto.
@@ -47,7 +47,7 @@ android {
         debug {
             isMinifyEnabled = false
             applicationIdSuffix = ".debug"
-            versionNameSuffix = "-it-debug"
+            versionNameSuffix = "-it-esteri-debug"
         }
         release {
             isMinifyEnabled = false
@@ -83,6 +83,7 @@ android {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
     implementation(composeBom)
 

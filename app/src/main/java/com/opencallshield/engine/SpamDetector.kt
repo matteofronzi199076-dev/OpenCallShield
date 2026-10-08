@@ -3,21 +3,11 @@ package com.opencallshield.engine
 import android.content.Context
 import com.opencallshield.data.SpamRepository
 
-/**
- * Motor deterministico de reglas de deteccion de SPAM.
- *
- * Orden de evaluacion:
- *   1. Contacto conocido          -> PERMITIR (siempre gana)
- *   2. En base de datos de SPAM   -> BLOQUEAR
- *   3. Prefijo en lista negra     -> BLOQUEAR
- *   4. Numero desconocido/oculto  -> BLOQUEAR (solo si el usuario lo activo)
- *   5. En cualquier otro caso     -> PERMITIR
- */
+/** Contatti, lista SPAM, blocco estero, prefissi personalizzati, sconosciuti. */
 class SpamDetector(
     private val context: Context,
     private val repo: SpamRepository
 ) {
-
     sealed class Decision {
         data object Allow : Decision()
         data class Block(val reason: String, val silence: Boolean) : Decision()
@@ -25,37 +15,16 @@ class SpamDetector(
 
     suspend fun evaluate(rawNumber: String?): Decision {
         val settings = repo.settings
-        val silence = settings.silenceInsteadOfReject
         val number = SpamRepository.normalize(rawNumber.orEmpty())
-
-        // 1. Contacto conocido -> nunca se bloquea
-        if (number.isNotEmpty() && ContactsChecker.isKnownContact(context, number)) {
-            return Decision.Allow
-        }
-
-        // 2. Reportado como SPAM (local o colaborativo)
-        if (number.isNotEmpty() && repo.isSpam(number)) {
-            return Decision.Block("Segnalato come SPAM", silence)
-        }
-
-        // 3. Prefijo en lista negra
-        if (settings.blockPrefixes && number.isNotEmpty()) {
-            val match = settings.prefixes().firstOrNull { number.startsWith(it) }
-            if (match != null) {
-                return Decision.Block("Prefisso sospetto ($match)", silence)
-            }
-        }
-
-        // 4. Numero desconocido u oculto
-        if (settings.blockUnknown) {
-            return if (number.isEmpty()) {
-                Decision.Block("Numero nascosto", silence)
-            } else {
-                Decision.Block("Numero non presente nei contatti", silence)
-            }
-        }
-
-        return Decision.Allow
+        val knownContact = number.isNotEmpty() && ContactsChecker.isKnownContact(context, number)
+        val reason = CallBlockingRules.reason(
+            number = number,
+            knownContact = knownContact,
+            reportedSpam = !knownContact && number.isNotEmpty() && repo.isSpam(number),
+            blockForeign = settings.blockForeign,
+            blockedPrefixes = if (settings.blockPrefixes) settings.prefixes() else emptyList(),
+            blockUnknown = settings.blockUnknown
+        )
+        return if (reason == null) Decision.Allow else Decision.Block(reason, settings.silenceInsteadOfReject)
     }
 }
-

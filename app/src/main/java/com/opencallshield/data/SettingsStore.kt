@@ -21,6 +21,11 @@ class SettingsStore(context: Context) {
         get() = prefs.getBoolean(KEY_BLOCK_PREFIXES, true)
         set(value) = prefs.edit().putBoolean(KEY_BLOCK_PREFIXES, value).apply()
 
+    /** Blocca automaticamente i prefissi esteri; i contatti hanno la precedenza. */
+    var blockForeign: Boolean
+        get() = prefs.getBoolean(KEY_BLOCK_FOREIGN, true)
+        set(value) = prefs.edit().putBoolean(KEY_BLOCK_FOREIGN, value).apply()
+
     /** Si true, las llamadas se silencian en vez de rechazarse. */
     var silenceInsteadOfReject: Boolean
         get() = prefs.getBoolean(KEY_SILENCE, false)
@@ -57,6 +62,7 @@ class SettingsStore(context: Context) {
     companion object {
         private const val KEY_BLOCK_UNKNOWN = "block_unknown"
         private const val KEY_BLOCK_PREFIXES = "block_prefixes"
+        private const val KEY_BLOCK_FOREIGN = "block_foreign"
         private const val KEY_SILENCE = "silence_instead_reject"
         private const val KEY_PREFIXES = "prefix_list"
         private const val KEY_SYNC_URL = "sync_url"
@@ -67,7 +73,7 @@ class SettingsStore(context: Context) {
         // Prefijos de ejemplo frecuentemente asociados a fraudes internacionales.
         const val DEFAULT_PREFIXES = "+234,+91,+62,+1900,+225"
         const val DEFAULT_SYNC_URL =
-            "https://raw.githubusercontent.com/jhonsu01/OpenCallShield/main/spam_numbers.json"
+            "https://raw.githubusercontent.com/matteofronzi199076-dev/OpenCallShield/main/data/italia/spam_numbers.json"
 
         // Client ID de la OAuth App (publico). Tambien se puede sobrescribir desde
         // la pantalla Cuenta de la app.
@@ -76,3 +82,4 @@ class SettingsStore(context: Context) {
         const val DEFAULT_CONTRIB_REPO = "OpenCallShield"
     }
 }
+

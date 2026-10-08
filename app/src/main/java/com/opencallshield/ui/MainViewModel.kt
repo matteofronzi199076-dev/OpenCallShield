@@ -28,6 +28,7 @@ import kotlinx.coroutines.withContext
 data class SettingsUiState(
     val blockUnknown: Boolean = false,
     val blockPrefixes: Boolean = true,
+    val blockForeign: Boolean = true,
     val silence: Boolean = false,
     val prefixes: String = SettingsStore.DEFAULT_PREFIXES,
     val syncUrl: String = SettingsStore.DEFAULT_SYNC_URL,
@@ -71,6 +72,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private fun currentSettings() = SettingsUiState(
         blockUnknown = settings.blockUnknown,
         blockPrefixes = settings.blockPrefixes,
+        blockForeign = settings.blockForeign,
         silence = settings.silenceInsteadOfReject,
         prefixes = settings.prefixList,
         syncUrl = settings.syncUrl
@@ -107,6 +109,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun setBlockPrefixes(value: Boolean) {
         settings.blockPrefixes = value
         _state.update { it.copy(blockPrefixes = value) }
+    }
+
+    fun setBlockForeign(value: Boolean) {
+        settings.blockForeign = value
+        _state.update { it.copy(blockForeign = value) }
     }
 
     fun setSilence(value: Boolean) {
