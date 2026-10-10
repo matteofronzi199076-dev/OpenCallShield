@@ -1,24 +1,24 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-07",
+  "updated_at": "2026-10-09",
   "license": "CC-BY-SA-4.0",
   "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
   "modifications": "CSV italiano convertito nel formato OpenCallShield e unito al database originale; aggiunte le forme esatte +39, nazionale e 0039. Nessuna regola di prefisso; nessun incremento delle segnalazioni.",
   "matching": "exact_numbers_only",
-  "number_of_records": 822,
+  "number_of_records": 831,
   "sources": [
     {
       "repository": "https://github.com/jhonsu01/OpenCallShield",
       "path": "spam_numbers.json",
-      "git_ref": "1b870aba50be9598e6dba0ba1016865e914a7c28",
-      "url": "https://github.com/jhonsu01/OpenCallShield/blob/1b870aba50be9598e6dba0ba1016865e914a7c28/spam_numbers.json",
-      "raw_url": "https://raw.githubusercontent.com/jhonsu01/OpenCallShield/1b870aba50be9598e6dba0ba1016865e914a7c28/spam_numbers.json",
-      "sha256": "4e8a98f1c3e9050a2ed118bb7e06b87a3d795de2ce2023740a298fd0dec72ccb",
+      "git_ref": "7cbce51602ae2eb455edb44597954f65bc4fafe3",
+      "url": "https://github.com/jhonsu01/OpenCallShield/blob/7cbce51602ae2eb455edb44597954f65bc4fafe3/spam_numbers.json",
+      "raw_url": "https://raw.githubusercontent.com/jhonsu01/OpenCallShield/7cbce51602ae2eb455edb44597954f65bc4fafe3/spam_numbers.json",
+      "sha256": "cab6d7e404401b90efc0f7d95aef5b291b0d73233bcf49456d302b1098f91ae5",
       "name": "OpenCallShield — database originale",
       "license": "MIT",
-      "license_url": "https://github.com/jhonsu01/OpenCallShield/blob/1b870aba50be9598e6dba0ba1016865e914a7c28/LICENSE",
-      "updated_at": "2026-10-07",
-      "unique_numbers": 813
+      "license_url": "https://github.com/jhonsu01/OpenCallShield/blob/7cbce51602ae2eb455edb44597954f65bc4fafe3/LICENSE",
+      "updated_at": "2026-10-09",
+      "unique_numbers": 822
     },
     {
       "repository": "https://github.com/thesqual87/blocklist-telefonica-italia",
